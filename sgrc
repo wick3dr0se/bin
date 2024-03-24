@@ -1,0 +1,33 @@
+#!/bin/bash
+
+_out(){
+	printf "\e[1;40;97m%s\e[0m\n" "$1"
+}
+
+4bit() { # 7 colors
+  printf '\e[1;%s%sm%s%s\e[0m' \
+    "$1" "$i" "$1" "$i"
+}
+
+8bit() { # 256 colors
+  printf '\e[%s8;5;%sm%s\e[0m' \
+    "$1" "$i" "$i"
+}
+
+_out '4-bit ANSI escape sequence'
+_out 'Usage: \e[1;??m .. \e[0m'
+for i in {0..7} ; do
+	4bit 3 # forground
+	4bit 4 # background
+	4bit 9 # foreground
+	4bit 10 # background
+done
+
+printf '\n\n'
+_out '8-bit ANSI escape sequence'
+_out 'Usage: \e[?8;5;???m .. \e[0m'
+for i in {0..256} ; do
+	8bit 3 # forground
+	8bit 4 # background
+done
+echo

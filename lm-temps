@@ -1,0 +1,32 @@
+#!/bin/bash
+
+write() { printf '%s\e[1;3%sm%s\e[0m°F\n' "$1" "$3" "$2"; }
+
+printf '<100°F: \e[1;44m \e[0m <125°F: \e[1;42m \e[0m <150°F: \e[1;43m \e[0m <190°F: \e[1;41m \e[0m\n'
+
+while read line; do
+    [[ $line =~ - ]]&& {
+        device="$line"
+        printf '\n%s\n' "${device%%-*}"
+        
+        while read device temp ; do
+			[[ $device =~ - ]] && printf '\n%s\n' "${device%%-*}"
+
+            if [[ $temp =~ ° ]] ; then
+                temp="${temp/.*}" temp="${temp/+}"
+
+				if (( temp < 100 )) ; then
+					write "$device " "$temp"  4
+				elif (( temp < 125 )) ; then
+					write "$device " "$temp" 2
+				elif (( temp < 150 )) ; then
+					write "$device " "$temp" 3
+				elif (( temp < 190 )) ; then
+					write "$device " "$temp" 1
+                    
+                    (( temp > 190 ))&& printf '%s\n' 'Temperature at critical level'
+				fi
+            fi
+        done
+    }
+done < <(sensors -fA) 

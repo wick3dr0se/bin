@@ -1,0 +1,21 @@
+#!/bin/bash
+
+
+url='https://source.unsplash.com/random'
+
+for i in $@ ; do
+  [[ $i =~ ^- ]] || query+="$i,"
+done
+
+if [[ $(command -v xwallpaper) ]] ; then
+  setter='xwallpaper --zoom'
+elif [[ `command -v feh` ]] ; then
+  setter='feh --bg-fill'
+elif [[ `command -v nitrogen` ]] ; then
+  setter='nitrogen --set-zoom-fill'
+else
+  echo 'No supported wallpaper setter found' && exit 1
+fi
+
+curl -L $url/?${query%,} -o ~/wp 2>/dev/null
+$setter ~/wp
