@@ -7,4 +7,4 @@ randWall="${walls[SRANDOM % ${#walls[@]}]}"
 
 hyprctl hyprpaper preload "$randWall"
 hyprctl hyprpaper wallpaper "${1:-$monitor}, $randWall"
-hyprctl hyprpaper unload all
+hyprctl hyprpaper unload unused
