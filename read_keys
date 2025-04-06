@@ -1,0 +1,11 @@
+#!/bin/bash
+
+read_keys() {
+    read -rsn1
+    [[ $REPLY == $'\e' ]]&& read -rsn2
+}
+
+for((;;)) {
+    read_keys
+    printf '\e[T\e[999;999H KEY: %s' "$REPLY"
+}
