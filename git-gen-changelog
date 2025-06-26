@@ -1,0 +1,16 @@
+#!/bin/bash
+
+set -e
+
+prev_tag=$(git describe --tags --abbrev=0)
+: "${1:-CHANGELOG}"; log_file="${_%.*}.md"
+changes=$(git log "$prev_tag"..HEAD --pretty=format:'- %s (%h)')
+
+[[ $changes ]] || {
+    printf 'No changes to generate from %s to HEAD\n' "$prev_tag" >&2
+    exit 1
+}
+
+printf 'Generating changelog from %s to HEAD\n' "$prev_tag"
+
+printf '## %s\n%s\n' "What's Changed" "$changes" >"$log_file"
